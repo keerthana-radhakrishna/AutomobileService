@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="ISO-8859-1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<title>retreive details</title>
+
+<style>
+h2{
+	text-align:center;
+}
+
+</style>
+<script type="text/javascript" src="js/jquery1-7-2.js"></script>
+<script type="text/javascript">
+$(function(){
+	var str="";
+	var str1="";
+	$("#searchBtn").on('click',function(){
+		$.get( "http://localhost:8080/AutomobileServiceCompany/rest/customer/search?phoneNumber="+$('#mobilenumber').val(),
+				function( data ) {
+				str+="Name: ";
+				str+=data['customerName'];
+				str+=", Contact Number: ";
+				str+=data['phoneNumber']
+				str+=", car number: ";
+				str+=data['carNumber'];
+				
+					if(data['polishing']) str1+= "Polishing";
+					if(data['wheelBalancing']) str1+= "Wheel Balancing";
+					if(data['decors']) str1+= "Decors";
+					console.log(data['wheelBalancing']);
+					//console.log(str);
+					//console.log(data);
+					$('#msg').text(str+" "+str1);
+					
+				})
+				console.log(str);
+			//$('#msg').text(str);
+		});
+	});
+$(function(){
+	var str="";
+	$("#insBtn").on('click',function(){
+		$.get( "http://localhost:8080/InsuranceCompany/rest/insurance/getInsurance?vehicleNum="
+				+$('#vehicleNumIns').val()+"&service="+$('#serviceIns').val(),
+				function( data) {
+					//str+="Insurance amt: ";
+					//str+=data['amt'];
+					$('#inamt').text("Insurance amount is"+data);
+			console.log(data);
+		});
+	
+	});
+});
+
+</script>
+</head>
+<body>
+<h2>ABC Automobile Service Company</h2>
+<p>Enter the mobile number of the customer whose car's service details has to be retreived</p>
+<form>
+<label for="">Mobile Number</label>
+	<input type="text"  id="mobilenumber" />
+	<input type="button" value="search" id="searchBtn" class="btn btn-primary"/>
+</form><br /><br />
+<div id="msg"></div><br /><br />
+<p>Enter the details to get insurance details</p>
+<div class="col-md-3">
+<div id="rightDiv" class="form-group">
+	Vehicle Number <input type="text" id="vehicleNumIns" class="form-control"><br /><br />
+	Service <input type="text" id="serviceIns" class="form-control"><br /><br />
+	<input type="button" name="insurance" id="insBtn" value="Get Insurance" class="btn btn-primary"/>
+	<div id="inamt"></div>
+	<br /><br />
+	</div>
+</body>
+</html>
